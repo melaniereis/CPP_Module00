@@ -6,13 +6,21 @@
 /*   By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 16:16:08 by meferraz          #+#    #+#             */
-/*   Updated: 2025/03/19 21:20:43 by meferraz         ###   ########.fr       */
+/*   Updated: 2025/03/19 21:34:12 by meferraz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "Contact.hpp"
 # include "PhoneBook.hpp"
 
+/**
+ * Program entry point.
+ *
+ * This function implements a simple command loop that allows the user to add
+ * contacts to the phonebook, search for contacts, and exit the program. The
+ * loop prompts the user for a command, executes the selected action, and
+ * displays an appropriate message if an invalid command is entered.
+ */
 int main(void)
 {
 	PhoneBook phonebook;
