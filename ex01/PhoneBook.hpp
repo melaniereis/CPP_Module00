@@ -6,7 +6,7 @@
 /*   By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:59:13 by meferraz          #+#    #+#             */
-/*   Updated: 2025/03/19 21:34:20 by meferraz         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:23:16 by meferraz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ class PhoneBook
 		Contact contacts[8];
 		int index;
 		int contact_count;
+		private:
+		std::string get_valid_input(const std::string &prompt);
 	public:
 		PhoneBook(void);
 		~PhoneBook(void);

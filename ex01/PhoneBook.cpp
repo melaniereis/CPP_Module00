@@ -6,7 +6,7 @@
 /*   By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:46:20 by meferraz          #+#    #+#             */
-/*   Updated: 2025/03/19 21:34:19 by meferraz         ###   ########.fr       */
+/*   Updated: 2025/03/20 15:23:01 by meferraz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,82 +52,65 @@ PhoneBook::~PhoneBook(void)
 }
 
 /**
- * Adds a new contact to the phone book.
+ * Prompts the user for input until a non-empty string is provided.
  *
- * This function prompts the user for the details of the contact (first name,
- * last name, nickname, phone number, and darkest secret). The function will
- * not accept empty input for any of the fields. If the input is invalid (e.g.
- * entering a string for the phone number), the function will print an error
- * message and return without adding the contact. If the input is valid, the
- * contact is added to the next available position in the contacts array, and
- * the contact_count variable is incremented if it has not reached 8 yet. The
- * index variable is then moved to the next position (cyclically).
+ * @param prompt The message displayed to the user.
+ * @return A non-empty string entered by the user.
+ */
+
+std::string PhoneBook::get_valid_input(const std::string &prompt)
+{
+	std::string input;
+	do
+	{
+		std::cout << prompt;
+		std::getline(std::cin, input);
+		if (input.empty())
+			std::cout << "Empty input is not allowed." << std::endl;
+	} while (input.empty());
+	return input;
+}
+
+/**
+ * Adds a new contact to the phonebook.
+ *
+ * This function prompts the user to enter the contact's first name, last name,
+ * nickname, phone number, and darkest secret. The input is validated to ensure
+ * that the phone number is a valid unsigned integer. If the contact count is
+ * less than 8, it is incremented; otherwise, the index is reset to 0. Finally,
+ * the contact details are stored in the contacts array and the user is notified
+ * that the contact has been added successfully.
  */
 void PhoneBook::add_contact(void)
 {
-	// If the array is full, start overwriting from the beginning.
 	if (this->index >= 8)
 		this->index = 0;
 
-	std::string first, last, nick, phoneStr, secret;
-	unsigned int phone;
+	std::string first = get_valid_input("Enter first name: ");
+	std::string last = get_valid_input("Enter last name: ");
+	std::string nick = get_valid_input("Enter nickname: ");
 
-	std::cout << "Enter first name: " << std::endl;
-	std::getline(std::cin, first);
-	while (first.empty())
+	std::string phoneStr;
+	unsigned int phone;
+	while (true)
 	{
-		std::cout << "Empty input is not allowed." << std::endl;
-		std::cout << "Enter first name: " << std::endl;
-		std::getline(std::cin, first);
+		phoneStr = get_valid_input("Enter phone number: ");
+		try {
+			phone = std::stoul(phoneStr);
+			break;
+		} catch (const std::exception &e) {
+			std::cout << "Invalid phone number input. Please try again." << std::endl;
+		}
 	}
-	std::cout << "Enter last name: " << std::endl;
-	std::getline(std::cin, last);
-	while (last.empty())
-	{
-		std::cout << "Empty input is not allowed." << std::endl;
-		std::cout << "Enter last name: " << std::endl;
-		std::getline(std::cin, last);
-	}
-	std::cout << "Enter nickname: " << std::endl;
-	std::getline(std::cin, nick);
-	while (nick.empty())
-	{
-		std::cout << "Empty input is not allowed." << std::endl;
-		std::cout << "Enter nickname: " << std::endl;
-		std::getline(std::cin, nick);
-	}
-	std::cout << "Enter phone number: " << std::endl;
-	std::getline(std::cin, phoneStr);
-	while (phoneStr.empty())
-	{
-		std::cout << "Empty input is not allowed." << std::endl;
-		std::cout << "Enter phone number: " << std::endl;
-		std::getline(std::cin, phoneStr);
-	}
-	try
-	{
-		phone = std::stoul(phoneStr);
-	}
-	catch (const std::exception &e)
-	{
-		std::cout << "Invalid phone number input." << std::endl;
-		return;
-	}
-	std::cout << "Enter darkest secret: " << std::endl;
-	std::getline(std::cin, secret);
-	while (secret.empty())
-	{
-		std::cout << "Empty input is not allowed." << std::endl;
-		std::cout << "Enter darkest secret: " << std::endl;
-		std::getline(std::cin, secret);
-	}
-	// Set the contact details.
+
+	std::string secret = get_valid_input("Enter darkest secret: ");
+
 	this->contacts[this->index].set_contact(first, last, nick, phone, secret);
-	// Increase contactCount if it has not reached 8 yet.
 	if (this->contact_count < 8)
-	this->contact_count++;
-	// Move index to the next position (cyclically).
+		this->contact_count++;
 	this->index++;
+
+	std::cout << "Contact successfully added!" << std::endl;
 }
 
 /**
@@ -143,6 +126,12 @@ void PhoneBook::add_contact(void)
  */
 void PhoneBook::search_contact(void)
 {
+	if (this->contact_count == 0)
+	{
+		std::cout << "The phonebook is empty, no contacts available." << std::endl;
+		return;
+	}
+
 	// Print table header.
 	std::cout << std::setw(10) << "Index" << " |"
 	<< std::setw(10) << "First Name" << " |"
@@ -162,21 +151,30 @@ void PhoneBook::search_contact(void)
 		std::cout << "The phonebook is empty, no contacts available." << std::endl;
 		return;
 	}
+
 	// Prompt for the index to display.
-	std::cout << "Enter the index of the contact to display: ";
-	std::string index_input;
-	std::getline(std::cin, index_input);
-	if (index_input.length() != 1 || index_input < "0" || index_input > "7")
+	int idx;
+	while (true)
 	{
-		std::cout << "Invalid index." << std::endl;
-		return;
+		std::cout << "Enter the index of the contact to display: ";
+		std::string index_input;
+		std::getline(std::cin, index_input);
+
+		if (index_input.length() != 1 || index_input < "0" || index_input > "7")
+		{
+			std::cout << "Invalid index. Please enter a number between 0 and 7." << std::endl;
+			continue;
+		}
+
+		idx = index_input[0] - '0';
+		if (idx >= contact_count)
+		{
+			std::cout << "No contact exists at this index. Please try again." << std::endl;
+			continue;
+		}
+		break;
 	}
-	int idx = index_input[0] - '0';
-	if (idx >= contact_count)
-	{
-		std::cout << "No contact exists at this index." << std::endl;
-		return;
-	}
+
 	// Display full details of the chosen contact.
 	std::cout << "First name: " << contacts[idx].get_first_name() << std::endl;
 	std::cout << "Last name: " << contacts[idx].get_last_name() << std::endl;
