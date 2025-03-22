@@ -6,7 +6,7 @@
 #    By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 15:56:54 by meferraz          #+#    #+#              #
-#    Updated: 2025/03/20 15:41:39 by meferraz         ###   ########.fr        #
+#    Updated: 2025/03/22 09:09:50 by meferraz         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -92,11 +92,11 @@ test: all
 
 clean:
 	@echo -e "$(RED)$(BROOM) Cleaning object files... $(RESET)"
-	@$(RM) $(OBJS)
+	@$(RM) $(OBJS) $(BUILD_PATH)
 
 fclean: clean
 	@echo -e "$(RED)$(BROOM) Removing executable and build directory... $(RESET)"
-	@$(RM) $(NAME) $(BUILD_PATH)
+	@$(RM) $(NAME)
 
 re: fclean all
 	@echo -e "$(BLUE)$(REBUILD) Rebuilding $(NAME)... $(RESET)"
