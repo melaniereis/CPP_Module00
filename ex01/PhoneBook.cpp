@@ -6,11 +6,11 @@
 /*   By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 15:46:20 by meferraz          #+#    #+#             */
-/*   Updated: 2025/03/20 15:23:01 by meferraz         ###   ########.fr       */
+/*   Updated: 2025/03/22 09:35:16 by meferraz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "PhoneBook.hpp"
+#include "PhoneBook.hpp"
 
 /**
  * Truncates a string to 10 characters and appends a period if it exceeds
@@ -23,7 +23,7 @@
 std::string format_field(const std::string &str)
 {
 	if (str.length() > 10)
-	return str.substr(0, 9) + ".";
+		return str.substr(0, 9) + ".";
 	return str;
 }
 
@@ -95,11 +95,19 @@ void PhoneBook::add_contact(void)
 	while (true)
 	{
 		phoneStr = get_valid_input("Enter phone number: ");
-		try {
-			phone = std::stoul(phoneStr);
+		try
+		{
+			char *endptr;
+			unsigned long temp = strtoul(phoneStr.c_str(), &endptr, 10);
+			if (endptr == phoneStr.c_str() || *endptr != '\0')
+				throw std::invalid_argument("Invalid phone number input.");
+			phone = static_cast<unsigned int>(temp);
 			break;
-		} catch (const std::exception &e) {
-			std::cout << "Invalid phone number input. Please try again." << std::endl;
+		}
+		catch (const std::exception &e)
+		{
+			std::cout << "Invalid phone number input." << std::endl;
+			continue;
 		}
 	}
 
@@ -134,17 +142,17 @@ void PhoneBook::search_contact(void)
 
 	// Print table header.
 	std::cout << std::setw(10) << "Index" << " |"
-	<< std::setw(10) << "First Name" << " |"
-	<< std::setw(10) << "Last Name" << " |"
-	<< std::setw(10) << "Nickname" << std::endl;
+			  << std::setw(10) << "First Name" << " |"
+			  << std::setw(10) << "Last Name" << " |"
+			  << std::setw(10) << "Nickname" << std::endl;
 
 	// Use contactCount to loop only through valid contacts.
 	for (int i = 0; i < this->contact_count; i++)
 	{
 		std::cout << std::setw(10) << i << " |"
-				<< std::setw(10) << format_field(contacts[i].get_first_name()) << " |"
-				<< std::setw(10) << format_field(contacts[i].get_last_name()) << " |"
-				<< std::setw(10) << format_field(contacts[i].get_nickname()) << std::endl;
+				  << std::setw(10) << format_field(contacts[i].get_first_name()) << " |"
+				  << std::setw(10) << format_field(contacts[i].get_last_name()) << " |"
+				  << std::setw(10) << format_field(contacts[i].get_nickname()) << std::endl;
 	}
 	if (this->contact_count == 0)
 	{
