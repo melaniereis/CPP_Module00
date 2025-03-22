@@ -6,7 +6,7 @@
 /*   By: meferraz <meferraz@student.42porto.pt>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/20 15:33:37 by meferraz          #+#    #+#             */
-/*   Updated: 2025/03/20 16:24:42 by meferraz         ###   ########.fr       */
+/*   Updated: 2025/03/22 09:01:08 by meferraz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,20 @@ Account::Account(int initial_deposit) : _accountIndex(_nbAccounts), _amount(init
 {
 	_nbAccounts++;
 	_totalAmount += initial_deposit;
+	_displayTimestamp();
+	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";created" << std::endl;
+}
+
+/**
+ * Default constructor for the Account class.
+ *
+ * This constructor initializes an account with a zero balance, and
+ * assigns a unique index to the account. It also increments the total
+ * number of accounts. The current timestamp is displayed along with the
+ * account index and amount upon creation.
+ */
+Account::Account(void) : _accountIndex(_nbAccounts), _amount(0), _nbDeposits(0), _nbWithdrawals(0)
+{
 	_displayTimestamp();
 	std::cout << "index:" << _accountIndex << ";amount:" << _amount << ";created" << std::endl;
 }
@@ -76,7 +90,6 @@ int Account::getNbAccounts(void)
 int Account::getTotalAmount(void)
 {
 	return _totalAmount;
-
 }
 
 /**
@@ -156,7 +169,8 @@ bool Account::makeWithdrawal(int withdrawal)
 {
 	_displayTimestamp();
 	std::cout << "index:" << _accountIndex << ";p_amount:" << _amount << ";withdrawal:";
-	if (withdrawal > checkAmount()) {
+	if (withdrawal > checkAmount())
+	{
 		std::cout << "refused" << std::endl;
 		return false;
 	}
