@@ -316,6 +316,6 @@ After mastering Module 00, you'll be ready to tackle:
 
 *"Every expert was once a beginner. Every pro was once an amateur."*
 
-**Module 00 Complete** ✨ | **Next**: [Module 01 →](../CPP_Module01/README.md)
+**Module 00 Complete** ✨ | **Next**: [Module 01 →](../CPP_Module01/)
 
 </div>
